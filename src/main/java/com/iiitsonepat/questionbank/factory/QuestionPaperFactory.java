@@ -21,7 +21,7 @@ public class QuestionPaperFactory {
 
                 .academicYear(request.getAcademicYear())
 
-                .batch(request.getBatch())
+                .branch(request.getBranch())
 
                 .examinationType(request.getExaminationType())
 
@@ -45,7 +45,7 @@ public class QuestionPaperFactory {
         paper.setTitle(request.getTitle());
         paper.setSemester(request.getSemester());
         paper.setAcademicYear(request.getAcademicYear());
-        paper.setBatch(request.getBatch());
+        paper.setBranch(request.getBranch());
         paper.setExaminationType(request.getExaminationType());
 
     }

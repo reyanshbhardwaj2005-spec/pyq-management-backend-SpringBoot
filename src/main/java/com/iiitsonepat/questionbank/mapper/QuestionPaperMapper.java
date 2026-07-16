@@ -15,7 +15,7 @@ public class QuestionPaperMapper {
                 .title(paper.getTitle())
                 .semester(paper.getSemester())
                 .academicYear(paper.getAcademicYear())
-                .batch(paper.getBatch())
+                .branch(paper.getBranch())
                 .examinationType(paper.getExaminationType())
                 .originalFileName(paper.getOriginalFileName())
                 .fileSize(paper.getFileSize())

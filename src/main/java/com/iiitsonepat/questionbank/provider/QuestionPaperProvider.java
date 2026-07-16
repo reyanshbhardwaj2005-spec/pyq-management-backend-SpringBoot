@@ -6,6 +6,7 @@ import com.iiitsonepat.questionbank.enums.PaperStatus;
 import com.iiitsonepat.questionbank.exception.ResourceNotFoundException;
 import com.iiitsonepat.questionbank.repository.QuestionPaperRepository;
 import org.springframework.stereotype.Component;
+import com.iiitsonepat.questionbank.enums.Branch;
 
 @Component
 public class QuestionPaperProvider {
@@ -29,12 +30,12 @@ public class QuestionPaperProvider {
         return paper;
     }
 
-    public QuestionPaper getActivePaper(Integer semester, ExaminationType examinationType, Integer academicYear, String batch){
-        return repository.findBySemesterAndExaminationTypeAndAcademicYearAndBatchAndStatus(
+    public QuestionPaper getActivePaper(Integer semester, ExaminationType examinationType, Integer academicYear, Branch branch){
+        return repository.findBySemesterAndExaminationTypeAndAcademicYearAndBranchAndStatus(
                         semester,
                         examinationType,
                         academicYear,
-                        batch,
+                        branch,
                         PaperStatus.ACTIVE).orElseThrow(() -> new ResourceNotFoundException("Question paper not found."));
     }
 }

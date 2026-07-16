@@ -1,5 +1,6 @@
 package com.iiitsonepat.questionbank.dto.resopnse;
 
+import com.iiitsonepat.questionbank.enums.Branch;
 import com.iiitsonepat.questionbank.enums.ExaminationType;
 import com.iiitsonepat.questionbank.enums.PaperStatus;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class PaperResponse {
 
     private Integer academicYear;
 
-    private String batch;
+    private Branch branch;
 
     private String originalFileName;
 

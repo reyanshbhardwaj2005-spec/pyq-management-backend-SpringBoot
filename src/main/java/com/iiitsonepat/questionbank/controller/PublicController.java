@@ -3,6 +3,7 @@ package com.iiitsonepat.questionbank.controller;
 import com.iiitsonepat.questionbank.dto.resopnse.ApiResponse;
 import com.iiitsonepat.questionbank.dto.resopnse.StudentPaperResponse;
 import com.iiitsonepat.questionbank.entity.QuestionPaper;
+import com.iiitsonepat.questionbank.enums.Branch;
 import com.iiitsonepat.questionbank.enums.ExaminationType;
 import com.iiitsonepat.questionbank.provider.QuestionPaperProvider;
 import com.iiitsonepat.questionbank.service.PublicPaperService;
@@ -25,20 +26,42 @@ public class PublicController {
     private final QuestionPaperProvider questionPaperProvider;
 
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<StudentPaperResponse>> searchPaper(@RequestParam Integer semester,
-                                                                         @RequestParam ExaminationType examinationType,
-                                                                         @RequestParam Integer academicYear,
-                                                                         @RequestParam String batch){
+    public ResponseEntity<ApiResponse<List<StudentPaperResponse>>> searchPapers(
 
-        StudentPaperResponse response = publicPaperService.searchPaper(semester, examinationType, academicYear, batch);
+            @RequestParam(required = false)
+            Integer semester,
 
-        return ResponseEntity.ok(ApiResponse.<StudentPaperResponse>builder()
+            @RequestParam(required = false)
+            ExaminationType examinationType,
+
+            @RequestParam(required = false)
+            Integer academicYear,
+
+            @RequestParam(required = false)
+            Branch branch
+
+    ) {
+
+        List<StudentPaperResponse> papers =
+                publicPaperService.searchPapers(
+                        semester,
+                        examinationType,
+                        academicYear,
+                        branch
+                );
+
+        return ResponseEntity.ok(
+
+                ApiResponse.<List<StudentPaperResponse>>builder()
                         .success(true)
                         .status(200)
-                        .message("Question paper found successfully.")
-                        .data(response)
+                        .message("Question papers fetched successfully.")
+                        .data(papers)
                         .timestamp(LocalDateTime.now())
-                        .build());
+                        .build()
+
+        );
+
     }
 
     @GetMapping("/{id}/download")
@@ -65,14 +88,14 @@ public class PublicController {
                         .build());
     }
 
-    @GetMapping("/filters/batches")
-    public ResponseEntity<ApiResponse<List<String>>> getBatches() {
+    @GetMapping("/filters/branches")
+    public ResponseEntity<ApiResponse<List<Branch>>> getBatches() {
 
-        return ResponseEntity.ok(ApiResponse.<List<String>>builder()
+        return ResponseEntity.ok(ApiResponse.<List<Branch>>builder()
                         .success(true)
                         .status(200)
                         .message("Batches fetched successfully.")
-                        .data(publicPaperService.getBatches())
+                        .data(publicPaperService.getBranches())
                         .timestamp(LocalDateTime.now())
                         .build());
     }

@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.core.io.Resource;
+import com.iiitsonepat.questionbank.enums.Branch;
+import com.iiitsonepat.questionbank.specification.QuestionPaperSpecification;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,21 +28,52 @@ public class PublicPaperServiceImpl implements PublicPaperService {
     private final QuestionPaperRepository questionPaperRepository;
 
     @Override
-    public StudentPaperResponse searchPaper(Integer semester, ExaminationType examinationType, Integer academicYear, String batch) {
-        QuestionPaper paper = questionPaperProvider.getActivePaper(
-                semester,
-                examinationType,
-                academicYear,
-                batch);
-        return StudentPaperResponse.builder()
-                .id(paper.getId())
-                .title(paper.getTitle())
-                .semester(paper.getSemester())
-                .academicYear(paper.getAcademicYear())
-                .batch(paper.getBatch())
-                .examinationType(paper.getExaminationType())
-                .uploadedAt(paper.getUploadedAt())
-                .build();
+    public List<StudentPaperResponse> searchPapers(
+            Integer semester,
+            ExaminationType examinationType,
+            Integer academicYear,
+            Branch branch
+    ) {
+
+        List<QuestionPaper> papers = questionPaperRepository.findAll(
+                QuestionPaperSpecification.search(
+                        semester,
+                        examinationType,
+                        academicYear,
+                        branch
+                )
+        );
+
+        System.out.println("==================================");
+        System.out.println("Semester = " + semester);
+        System.out.println("Exam = " + examinationType);
+        System.out.println("Year = " + academicYear);
+        System.out.println("Branch = " + branch);
+        System.out.println("Papers Found = " + papers.size());
+
+        for (QuestionPaper p : papers) {
+            System.out.println(
+                    "ID=" + p.getId()
+                            + ", Title=" + p.getTitle()
+                            + ", Branch=" + p.getBranch()
+                            + ", Year=" + p.getAcademicYear()
+                            + ", Semester=" + p.getSemester()
+                            + ", Exam=" + p.getExaminationType()
+            );
+        }
+        System.out.println("==================================");
+
+        return papers.stream()
+                .map(paper -> StudentPaperResponse.builder()
+                        .id(paper.getId())
+                        .title(paper.getTitle())
+                        .semester(paper.getSemester())
+                        .academicYear(paper.getAcademicYear())
+                        .branch(paper.getBranch())
+                        .examinationType(paper.getExaminationType())
+                        .uploadedAt(paper.getUploadedAt())
+                        .build())
+                .toList();
     }
 
     @Override
@@ -55,8 +88,8 @@ public class PublicPaperServiceImpl implements PublicPaperService {
     }
 
     @Override
-    public List<String> getBatches() {
-        return questionPaperRepository.findDistinctBatches(PaperStatus.ACTIVE);
+    public List<Branch> getBranches() {
+        return questionPaperRepository.findDistinctBranches(PaperStatus.ACTIVE);
     }
 
     @Override

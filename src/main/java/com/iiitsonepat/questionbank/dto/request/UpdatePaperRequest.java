@@ -1,6 +1,9 @@
 package com.iiitsonepat.questionbank.dto.request;
 
+import com.iiitsonepat.questionbank.enums.Branch;
 import com.iiitsonepat.questionbank.enums.ExaminationType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +26,7 @@ public class UpdatePaperRequest {
     @NotNull(message = "Academic Year is required")
     private Integer academicYear;
 
-    @NotBlank(message = "Batch is required")
-    private String batch;
+    @NotNull(message = "Branch is required")
+    private Branch branch;
 
 }

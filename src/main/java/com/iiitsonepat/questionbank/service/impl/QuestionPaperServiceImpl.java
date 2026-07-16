@@ -127,13 +127,9 @@ public class QuestionPaperServiceImpl implements QuestionPaperService {
     @Override
     public Resource downloadPaper(Long id) {
 
-        QuestionPaper paper =
-                questionPaperProvider.getActivePaper(id);
-
+        QuestionPaper paper = questionPaperProvider.getActivePaper(id);
         return fileStorageService.loadFileAsResource(
-                paper.getFilePath()
-        );
-
+                paper.getFilePath());
     }
 
 }

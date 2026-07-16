@@ -1,6 +1,7 @@
 package com.iiitsonepat.questionbank.repository;
 
 import com.iiitsonepat.questionbank.entity.QuestionPaper;
+import com.iiitsonepat.questionbank.enums.Branch;
 import com.iiitsonepat.questionbank.enums.ExaminationType;
 import com.iiitsonepat.questionbank.enums.PaperStatus;
 import java.util.List;
@@ -9,17 +10,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface QuestionPaperRepository extends JpaRepository<QuestionPaper, Long> {
+public interface QuestionPaperRepository extends JpaRepository<QuestionPaper, Long>, JpaSpecificationExecutor<QuestionPaper> {
 
     // Check duplicate paper
-    Optional<QuestionPaper> findBySemesterAndExaminationTypeAndAcademicYearAndBatch(
+    Optional<QuestionPaper> findBySemesterAndExaminationTypeAndAcademicYearAndBranch(
             Integer semester,
             ExaminationType examinationType,
             Integer academicYear,
-            String batch);
+            Branch branch);
 
     // Get only active papers
     Page<QuestionPaper> findByStatus(
@@ -27,19 +28,19 @@ public interface QuestionPaperRepository extends JpaRepository<QuestionPaper, Lo
             Pageable pageable);
 
     // Student filter
-    Page<QuestionPaper> findBySemesterAndExaminationTypeAndAcademicYearAndBatchAndStatus(
+    Page<QuestionPaper> findBySemesterAndExaminationTypeAndAcademicYearAndBranchAndStatus(
             Integer semester,
             ExaminationType examinationType,
             Integer academicYear,
-            String batch,
+            Branch branch,
             PaperStatus status,
             Pageable pageable);
 
-    Optional<QuestionPaper> findBySemesterAndExaminationTypeAndAcademicYearAndBatchAndStatus(
+    Optional<QuestionPaper> findBySemesterAndExaminationTypeAndAcademicYearAndBranchAndStatus(
             Integer semester,
             ExaminationType examinationType,
             Integer academicYear,
-            String batch,
+            Branch branch,
             PaperStatus status);
 
     @Query("""
@@ -53,12 +54,12 @@ public interface QuestionPaperRepository extends JpaRepository<QuestionPaper, Lo
     );
 
     @Query("""
-       SELECT DISTINCT q.batch
+       SELECT DISTINCT q.branch
        FROM QuestionPaper q
        WHERE q.status = :status
-       ORDER BY q.batch DESC
+       ORDER BY q.branch DESC
        """)
-    List<String> findDistinctBatches(
+    List<Branch> findDistinctBranches(
             @Param("status") PaperStatus status
     );
 }

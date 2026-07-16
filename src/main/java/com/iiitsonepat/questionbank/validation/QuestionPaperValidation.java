@@ -29,11 +29,11 @@ public class QuestionPaperValidation {
 
     private void validateDuplicate(UploadPaperRequest request) {
 
-        boolean exists = repository.findBySemesterAndExaminationTypeAndAcademicYearAndBatch(
+        boolean exists = repository.findBySemesterAndExaminationTypeAndAcademicYearAndBranch(
                         request.getSemester(),
                         request.getExaminationType(),
                         request.getAcademicYear(),
-                        request.getBatch()).isPresent();
+                        request.getBranch()).isPresent();
 
         if (exists) {
             throw new DuplicatePaperException("Question paper already exists.");
