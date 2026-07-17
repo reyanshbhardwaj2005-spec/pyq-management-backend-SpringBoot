@@ -61,10 +61,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Object>> handleException(Exception ex) {
 
+        ex.printStackTrace();   // Print full stack trace in Railway logs
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.builder()
                         .success(false)
-                        .message("Something went wrong.")
+                        .message(ex.getClass().getSimpleName() + ": " + ex.getMessage())
                         .data(null)
                         .build());
     }
