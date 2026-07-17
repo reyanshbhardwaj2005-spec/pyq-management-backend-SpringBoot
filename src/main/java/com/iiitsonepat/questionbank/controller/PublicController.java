@@ -10,6 +10,11 @@ import com.iiitsonepat.questionbank.service.PublicPaperService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -122,5 +127,22 @@ public class PublicController {
                         .data(publicPaperService.getSemesters())
                         .timestamp(LocalDateTime.now())
                         .build());
+    }
+
+    @GetMapping("/debug/uploads")
+    public ResponseEntity<List<String>> listUploads() throws IOException {
+
+        Path root = Paths.get("uploads");
+
+        if (!Files.exists(root)) {
+            return ResponseEntity.ok(List.of("uploads folder does not exist"));
+        }
+
+        List<String> files = Files.walk(root)
+                .filter(Files::isRegularFile)
+                .map(Path::toString)
+                .toList();
+
+        return ResponseEntity.ok(files);
     }
 }
