@@ -42,6 +42,9 @@ public class FileStorageServiceImpl implements FileStorageService {
 
         try {
 
+            // Convert Windows separators to Linux separators
+            filePath = filePath.replace("\\", "/");
+
             Path path = Paths.get(filePath);
 
             Resource resource = new UrlResource(path.toUri());
@@ -53,11 +56,8 @@ public class FileStorageServiceImpl implements FileStorageService {
             throw new ResourceNotFoundException("File not found.");
 
         } catch (MalformedURLException ex) {
-
             throw new ResourceNotFoundException("File not found.");
-
         }
-
     }
 
 
